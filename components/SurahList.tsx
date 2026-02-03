@@ -5,7 +5,7 @@ import { Search, Loader2, List, Layers, BookOpen, ChevronRight } from 'lucide-re
 import { Surah } from '../types';
 import { fetchSurahs } from '../services/quranService';
 
-const SurahList: React.FC = () => {
+const SurahList: React.FC<{t: any}> = ({ t }) => {
   const [surahs, setSurahs] = useState<Surah[]>([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState('');
@@ -25,7 +25,7 @@ const SurahList: React.FC = () => {
     return (
       <div className="flex flex-col items-center justify-center h-96 gap-6">
         <Loader2 className="animate-spin text-emerald-600" size={60} />
-        <p className="text-slate-500 font-black text-xl animate-pulse">Menghubungkan ke Mushaf Digital...</p>
+        <p className="text-slate-500 font-black text-xl animate-pulse">Connecting to Mushaf...</p>
       </div>
     );
   }
@@ -34,8 +34,8 @@ const SurahList: React.FC = () => {
     <div className="max-w-6xl mx-auto space-y-12 pb-20 px-4">
       <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-8 border-b-4 border-slate-100 dark:border-slate-800 pb-12">
         <div>
-          <h1 className="text-5xl font-black mb-3 tracking-tighter text-slate-950 dark:text-white">Mushaf Al-Quran</h1>
-          <p className="text-slate-500 text-lg font-medium">Baca dan pahami makna setiap ayat suci dengan mudah.</p>
+          <h1 className="text-5xl font-black mb-3 tracking-tighter text-slate-950 dark:text-white">Quran Mushaf</h1>
+          <p className="text-slate-500 text-lg font-medium">Read and understand the divine meaning of every holy verse.</p>
         </div>
         
         <div className="flex flex-wrap items-center gap-4">
@@ -43,7 +43,7 @@ const SurahList: React.FC = () => {
             <Search className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-emerald-500 transition-colors" size={20} />
             <input 
               type="text" 
-              placeholder="Cari surah..."
+              placeholder="Search surah..."
               className="pl-14 pr-8 py-4 bg-white dark:bg-slate-800 border-2 border-slate-100 dark:border-slate-700 rounded-3xl focus:ring-4 focus:ring-emerald-500/20 outline-none w-full md:w-96 shadow-xl shadow-slate-200/20 font-bold transition-all text-lg text-slate-900 dark:text-white"
               value={search}
               onChange={(e) => setSearch(e.target.value)}
@@ -81,7 +81,7 @@ const SurahList: React.FC = () => {
               <div className="flex-1">
                 <h3 className="font-black text-slate-950 dark:text-white text-xl tracking-tight">{surah.englishName}</h3>
                 <p className="text-[11px] font-black text-slate-400 uppercase tracking-[0.2em] mt-1">
-                  {surah.englishNameTranslation} • {surah.numberOfAyahs} Ayat
+                  {surah.englishNameTranslation} • {surah.numberOfAyahs} Ayahs
                 </p>
               </div>
               <div className="text-right">
@@ -103,7 +103,7 @@ const SurahList: React.FC = () => {
                 <p className="text-[12px] text-slate-400 dark:text-slate-500 uppercase font-black tracking-[0.4em] mb-4 group-hover:text-emerald-600 transition-colors">Juz</p>
                 <span className="text-5xl font-black text-slate-950 dark:text-white">{juz}</span>
                 <div className="mt-8 flex justify-center items-center gap-2 text-emerald-600 font-black text-xs opacity-0 group-hover:opacity-100 transition-opacity">
-                  Baca <ChevronRight size={14} />
+                  Read <ChevronRight size={14} />
                 </div>
              </button>
            ))}

@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { Heart, Search, Share2, Copy, Check } from 'lucide-react';
 import { DOA_LIST } from '../constants';
 
-const DoaModule: React.FC = () => {
+const DoaModule: React.FC<{t: any}> = ({ t }) => {
   const [search, setSearch] = useState('');
   const [copiedId, setCopiedId] = useState<string | null>(null);
 
@@ -16,15 +16,15 @@ const DoaModule: React.FC = () => {
     <div className="max-w-4xl mx-auto space-y-8 pb-12">
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
-          <h1 className="text-3xl font-black mb-2">Doa-Doa Pilihan</h1>
-          <p className="text-slate-500">Kumpulan doa mustajab yang bersumber langsung dari Al-Quran.</p>
+          <h1 className="text-3xl font-black mb-2">Selected Supplications</h1>
+          <p className="text-slate-500">Collection of powerful supplications directly from the Quran.</p>
         </div>
         <div className="relative">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" size={18} />
           <input 
             type="text" 
-            placeholder="Cari doa..."
-            className="pl-10 pr-4 py-2 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl focus:ring-2 focus:ring-emerald-500 outline-none w-full md:w-64"
+            placeholder="Search doa..."
+            className="pl-10 pr-4 py-2 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl focus:ring-2 focus:ring-emerald-500 outline-none w-full md:w-64 font-bold"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
           />
@@ -53,14 +53,14 @@ const DoaModule: React.FC = () => {
                </div>
             </div>
 
-            <p className="font-quran text-3xl text-right mb-8 leading-loose text-slate-900 dark:text-white" dir="rtl">
+            <p className="font-quran text-3xl text-right mb-8 leading-loose" dir="rtl">
               {doa.arabic}
             </p>
 
             <div className="space-y-4">
-               <p className="text-emerald-600 dark:text-emerald-400 text-sm font-bold italic">{doa.latin}</p>
+               <p className="latin-reading text-sm italic">{doa.latin}</p>
                <p className="text-slate-600 dark:text-slate-400 leading-relaxed font-medium">"{doa.translation}"</p>
-               <p className="text-[10px] font-black uppercase text-slate-400 tracking-widest pt-4 border-t border-slate-100 dark:border-slate-700 inline-block">Sumber: {doa.source}</p>
+               <p className="text-[10px] font-black uppercase text-slate-400 tracking-widest pt-4 border-t border-slate-100 dark:border-slate-700 inline-block">Source: {doa.source}</p>
             </div>
           </div>
         ))}

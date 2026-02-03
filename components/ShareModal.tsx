@@ -1,6 +1,8 @@
 
 import React, { useRef, useState } from 'react';
-import { X, Download, Copy, Check, Share2, ZoomIn, ZoomOut } from 'lucide-react';
+// Added Loader2 to the imports from lucide-react
+import { X, Download, Copy, Check, Share2, ZoomIn, ZoomOut, Loader2 } from 'lucide-react';
+import html2canvas from 'html2canvas';
 
 interface ShareModalProps {
   isOpen: boolean;
@@ -18,10 +20,53 @@ const ShareModal: React.FC<ShareModalProps> = ({ isOpen, onClose, verse }) => {
   const [copied, setCopied] = useState(false);
   const [theme, setTheme] = useState<'emerald' | 'dark' | 'amber'>('emerald');
   const [imgFontSize, setImgFontSize] = useState(32);
+  const [isSaving, setIsSaving] = useState(false);
 
   const handleDownload = async () => {
-    const fileName = `${verse.surah}_${verse.ayah}.png`.replace(/\s+/g, '_');
-    alert(`Mendownload Gambar: ${fileName}\n(Gunakan html2canvas untuk implementasi penuh)`);
+    if (!shareRef.current) return;
+    try {
+      setIsSaving(true);
+      const canvas = await html2canvas(shareRef.current, {
+        scale: 3, // Higher resolution
+        useCORS: true,
+        backgroundColor: null,
+      });
+      
+      const imgData = canvas.toDataURL('image/jpeg', 0.95);
+      const fileName = `Iqro_Quran_Digital_${verse.surah.replace(/\s+/g, '_')}_Ayat_${verse.ayah}.jpg`;
+      
+      const link = document.createElement('a');
+      link.href = imgData;
+      link.download = fileName;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    } catch (err) {
+      console.error("Save image error:", err);
+      alert("Failed to save image. Please check permissions.");
+    } finally {
+      setIsSaving(false);
+    }
+  };
+
+  const handleNativeShare = async () => {
+    const text = `${verse.arabic}\n\n"${verse.translation}"\n(QS. ${verse.surah}: ${verse.ayah})\n\nShared via IQRO Quran Digital`;
+    if (navigator.share) {
+      try {
+        await navigator.share({
+          title: `Ayah Share: ${verse.surah}`,
+          text: text,
+        });
+      } catch (err) {
+        console.error("Native share failed:", err);
+      }
+    } else {
+      // Fallback: Copy to clipboard
+      navigator.clipboard.writeText(text);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+      alert("Share API not supported on this browser. Content copied to clipboard.");
+    }
   };
 
   const themes = {
@@ -54,7 +99,7 @@ const ShareModal: React.FC<ShareModalProps> = ({ isOpen, onClose, verse }) => {
             <div className="absolute top-0 left-0 w-full h-1 bg-white/20"></div>
             <p 
               className="font-quran mb-10 leading-[2] tracking-wide" 
-              style={{ fontSize: `${imgFontSize}px` }}
+              style={{ fontSize: `${imgFontSize}px`, color: theme === 'amber' ? 'black' : 'white' }}
               dir="rtl"
             >
               {verse.arabic}
@@ -99,10 +144,21 @@ const ShareModal: React.FC<ShareModalProps> = ({ isOpen, onClose, verse }) => {
             <div className="flex gap-3">
               <button 
                 onClick={handleDownload}
-                className="flex-1 bg-emerald-600 hover:bg-emerald-700 text-white font-black py-4 rounded-2xl flex items-center justify-center gap-3 transition-all shadow-xl shadow-emerald-600/20 active:scale-95"
+                disabled={isSaving}
+                className="flex-1 bg-emerald-600 hover:bg-emerald-700 text-white font-black py-4 rounded-2xl flex items-center justify-center gap-3 transition-all shadow-xl shadow-emerald-600/20 active:scale-95 disabled:opacity-50"
               >
-                <Download size={20} /> Simpan Gambar
+                {isSaving ? <Loader2 className="animate-spin" size={20} /> : <Download size={20} />} 
+                Simpan Gambar
               </button>
+              
+              <button 
+                onClick={handleNativeShare}
+                className="p-4 bg-blue-600 text-white rounded-2xl hover:bg-blue-700 transition-all shadow-md active:scale-95"
+                title="Share"
+              >
+                <Share2 size={24} />
+              </button>
+
               <button 
                 onClick={() => {
                    navigator.clipboard.writeText(`${verse.arabic}\n\n"${verse.translation}"\n(QS. ${verse.surah}: ${verse.ayah})`);

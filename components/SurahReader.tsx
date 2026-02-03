@@ -1,16 +1,17 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { ArrowLeft, Play, Bookmark, Share2, BookOpen, Loader2, Eye, EyeOff, Search, ZoomIn, ZoomOut, Copy, Check, Rocket, ChevronUp, ChevronDown, AlertCircle, RefreshCw } from 'lucide-react';
+import { ArrowLeft, Play, Bookmark, Share2, BookOpen, Loader2, Eye, EyeOff, Search, ZoomIn, ZoomOut, Copy, Check, Rocket, AlertCircle, RefreshCw } from 'lucide-react';
 import { fetchSurahWithTranslation } from '../services/quranService';
 import ShareModal from './ShareModal';
 import { formatHonorifics } from '../utils/honorifics';
 
 interface ReaderProps {
   appLang: string;
+  t: any;
 }
 
-const SurahReader: React.FC<ReaderProps> = ({ appLang }) => {
+const SurahReader: React.FC<ReaderProps> = ({ appLang, t }) => {
   const { number } = useParams<{ number: string }>();
   const navigate = useNavigate();
   const [data, setData] = useState<any>(null);
@@ -22,7 +23,6 @@ const SurahReader: React.FC<ReaderProps> = ({ appLang }) => {
   const [searchQuery, setSearchQuery] = useState('');
   const [playingAyah, setPlayingAyah] = useState<number | null>(null);
   const [copiedId, setCopiedId] = useState<number | null>(null);
-  const [showScrollTop, setShowScrollTop] = useState(false);
 
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
@@ -31,11 +31,11 @@ const SurahReader: React.FC<ReaderProps> = ({ appLang }) => {
     try {
       setLoading(true);
       setError(null);
-      const res = await fetchSurahWithTranslation(parseInt(number), 'id.indonesian'); 
+      const res = await fetchSurahWithTranslation(parseInt(number), appLang === 'id' ? 'id.indonesian' : 'en.ahmedali'); 
       setData(res);
     } catch (err: any) {
       console.error("Failed to load surah:", err);
-      setError(err.message || "Gagal memuat data Surah.");
+      setError(err.message || "Failed to load surah data.");
     } finally {
       setLoading(false);
     }
@@ -43,23 +43,12 @@ const SurahReader: React.FC<ReaderProps> = ({ appLang }) => {
 
   useEffect(() => {
     load();
-  }, [number]);
-
-  useEffect(() => {
-    const handleScroll = () => {
-      setShowScrollTop(window.scrollY > 500);
-    };
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
-
-  const scrollToTop = () => window.scrollTo({ top: 0, behavior: 'smooth' });
-  const scrollToBottom = () => window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+  }, [number, appLang]);
 
   if (loading) return (
     <div className="flex flex-col items-center justify-center h-full py-48 gap-8">
       <Loader2 className="animate-spin text-emerald-600" size={64} />
-      <p className="text-slate-500 font-black text-xl animate-pulse">Menghubungkan ke Mushaf Digital...</p>
+      <p className="text-slate-500 font-black text-xl animate-pulse">Connecting to Mushaf...</p>
     </div>
   );
 
@@ -69,13 +58,13 @@ const SurahReader: React.FC<ReaderProps> = ({ appLang }) => {
         <AlertCircle size={40} />
       </div>
       <div className="space-y-2">
-        <h2 className="text-2xl font-black text-slate-900 dark:text-white">Gagal Memuat Surah</h2>
-        <p className="text-slate-500 dark:text-slate-400 max-w-md">{error || "Terjadi kendala saat mengambil data surah. Pastikan koneksi internet Anda stabil."}</p>
+        <h2 className="text-2xl font-black text-slate-900 dark:text-white">Failed to Load</h2>
+        <p className="text-slate-500 dark:text-slate-400 max-w-md">{error || "Internet connection issue. Please try again."}</p>
       </div>
       <div className="flex gap-4">
-        <button onClick={() => navigate('/mushaf')} className="px-8 py-3 bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-white rounded-2xl font-black hover:bg-slate-300 dark:hover:bg-slate-600 transition-all">Kembali</button>
+        <button onClick={() => navigate('/mushaf')} className="px-8 py-3 bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-white rounded-2xl font-black hover:bg-slate-300 dark:hover:bg-slate-600 transition-all">Back</button>
         <button onClick={load} className="flex items-center gap-2 px-8 py-3 bg-emerald-600 text-white rounded-2xl font-black shadow-lg hover:bg-emerald-700 transition-all">
-          <RefreshCw size={18} /> Coba Lagi
+          <RefreshCw size={18} /> Retry
         </button>
       </div>
     </div>
@@ -121,10 +110,10 @@ const SurahReader: React.FC<ReaderProps> = ({ appLang }) => {
             </button>
             <div>
               <h1 className="font-black text-3xl text-slate-950 dark:text-white tracking-tight">{arabicEd.englishName}</h1>
-              <p className="text-[11px] font-black text-emerald-600 dark:text-emerald-400 uppercase tracking-[0.3em] mt-1">{arabicEd.revelationType} • {arabicEd.numberOfAyahs} Ayat</p>
+              <p className="text-[11px] font-black text-emerald-600 dark:text-emerald-400 uppercase tracking-[0.3em] mt-1">{arabicEd.revelationType} • {arabicEd.numberOfAyahs} Ayahs</p>
             </div>
           </div>
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-3 mr-24 md:mr-32">
             <button 
               onClick={() => setShowLatin(!showLatin)} 
               className={`p-4 rounded-2xl transition-all shadow-md active:scale-95 ${showLatin ? 'bg-amber-100 text-amber-600' : 'bg-slate-100 dark:bg-slate-800 text-slate-400'}`}
@@ -145,7 +134,7 @@ const SurahReader: React.FC<ReaderProps> = ({ appLang }) => {
               <Search size={20} className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-400" />
               <input 
                 type="text" 
-                placeholder="Cari kata dalam ayat..." 
+                placeholder="Search words in ayah..." 
                 className="w-full pl-14 pr-6 py-4 bg-slate-50 dark:bg-slate-900/50 rounded-2xl border-2 border-slate-100 dark:border-slate-800 outline-none focus:ring-2 focus:ring-emerald-500 font-bold transition-all shadow-inner text-slate-900 dark:text-white"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
@@ -171,7 +160,7 @@ const SurahReader: React.FC<ReaderProps> = ({ appLang }) => {
 
       {arabicEd.number !== 1 && arabicEd.number !== 9 && (
         <div className="text-center py-20 animate-in fade-in slide-in-from-top-4 duration-1000">
-           <p className="font-quran text-7xl text-slate-950 dark:text-white opacity-95 select-none font-bold" dir="rtl">
+           <p className="font-quran text-7xl select-none font-bold" dir="rtl">
              بِسْمِ ٱللّٰهِ الرَّحْمٰنِ الرَّحِيْمِ
            </p>
         </div>
@@ -189,7 +178,7 @@ const SurahReader: React.FC<ReaderProps> = ({ appLang }) => {
           }
 
           const translationText = translationEd.ayahs[index] ? formatHonorifics(translationEd.ayahs[index].text) : "";
-          const latinText = transliterationEd && transliterationEd.ayahs[index] ? transliterationEd.ayahs[index].text : "Bismillahir-rahmanir-rahim..."; 
+          const latinText = transliterationEd && transliterationEd.ayahs[index] ? transliterationEd.ayahs[index].text : ""; 
 
           if (searchQuery && !text.includes(searchQuery) && !translationText.toLowerCase().includes(searchQuery.toLowerCase())) {
             return null;
@@ -231,7 +220,7 @@ const SurahReader: React.FC<ReaderProps> = ({ appLang }) => {
 
                 <div className="text-right">
                   <p 
-                    className="font-quran leading-[2.6] tracking-wide text-slate-950 dark:text-slate-50 w-full select-all font-bold"
+                    className="font-quran leading-[2.6] tracking-wide w-full select-all font-bold"
                     style={{ fontSize: `${fontSize}px` }}
                     dir="rtl"
                   >
@@ -240,8 +229,8 @@ const SurahReader: React.FC<ReaderProps> = ({ appLang }) => {
                 </div>
 
                 {showLatin && (
-                   <div className="text-right border-r-4 border-amber-500/30 pr-6 mr-2">
-                     <p className="text-amber-700 dark:text-amber-400 font-bold italic text-2xl leading-relaxed tracking-tight">
+                   <div className="text-right border-r-4 border-emerald-500/30 pr-6 mr-2">
+                     <p className="latin-reading text-2xl leading-relaxed tracking-tight">
                         {latinText}
                      </p>
                    </div>
@@ -257,22 +246,7 @@ const SurahReader: React.FC<ReaderProps> = ({ appLang }) => {
           );
         })}
       </div>
-
-      <div className="fixed bottom-24 right-8 flex flex-col gap-4 z-50">
-        <button 
-          onClick={scrollToTop}
-          className={`p-5 bg-emerald-600 text-white rounded-[1.5rem] shadow-2xl transition-all duration-500 transform active:scale-90 hover:scale-110 ${showScrollTop ? 'translate-y-0 opacity-100' : 'translate-y-20 opacity-0 pointer-events-none'}`}
-        >
-          <ChevronUp size={28} />
-        </button>
-        <button 
-          onClick={scrollToBottom}
-          className={`p-5 bg-slate-900 dark:bg-emerald-800 text-white rounded-[1.5rem] shadow-2xl transition-all duration-500 transform active:scale-90 hover:scale-110 ${showScrollTop ? 'translate-y-0 opacity-100' : 'translate-y-20 opacity-0 pointer-events-none'}`}
-        >
-          <ChevronDown size={28} />
-        </button>
-      </div>
-
+      
       {shareVerse && (
         <ShareModal 
           isOpen={!!shareVerse} 

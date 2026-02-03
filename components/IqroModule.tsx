@@ -5,22 +5,22 @@ import { HIJAIYAH_LETTERS } from '../constants';
 import { speakText } from '../services/geminiService';
 
 const IQRO_LEVELS = [
-  { id: 1, title: 'Iqro 1', desc: 'Mengenal huruf Hijaiyah dasar dan harakat Fathah.', color: 'bg-emerald-500', icon: <Star size={24}/>, content: 'Tingkatan ini berfokus pada pengenalan huruf-huruf tunggal dari Alif sampai Ya.' },
-  { id: 2, title: 'Iqro 2', desc: 'Belajar huruf sambung dan bacaan panjang (mad thobi’i).', color: 'bg-blue-600', icon: <Sparkles size={24}/>, content: 'Memahami bagaimana huruf berubah bentuk saat disambung di awal, tengah, dan akhir kata.' },
-  { id: 3, title: 'Iqro 3', desc: "Memahami kasroh ('i'), dhommah ('u'), dan variasinya.", color: 'bg-amber-600', icon: <LayoutGrid size={24}/>, content: 'Fokus pada harakat dasar i (kasroh) dan u (dhommah) serta perubahan suaranya.' },
-  { id: 4, title: 'Iqro 4', desc: 'Belajar tanwin, sukun, nun mati, qolqolah, dan lainnya.', color: 'bg-indigo-600', icon: <Info size={24}/>, content: 'Latihan membaca tanwin (an, in, un) dan huruf mati (sukun) serta pantulan suara (qolqolah).' },
-  { id: 5, title: 'Iqro 5', desc: 'Hukum tajwid seperti waqof, tasydid, mad, idzhar, dan idghom.', color: 'bg-purple-600', icon: <BookOpen size={24}/>, content: 'Pendalaman hukum-hukum tajwid dalam pembacaan Al-Quran yang lebih kompleks.' },
-  { id: 6, title: 'Iqro 6', desc: 'Iqlab, ikhfa, tanda waqof, serta cara membaca huruf awal surat.', color: 'bg-pink-600', icon: <ChevronRight size={24}/>, content: 'Tingkatan akhir sebelum memasuki pembacaan Mushaf Al-Quran secara penuh.' },
+  { id: 1, title: 'Iqro 1', desc: 'Introduction to Hijaiyah letters and Fathah.', color: 'bg-emerald-500', icon: <Star size={24}/>, content: 'This level focuses on single letters from Alif to Ya.' },
+  { id: 2, title: 'Iqro 2', desc: 'Learning connected letters and long vowels.', color: 'bg-blue-600', icon: <Sparkles size={24}/>, content: 'Understanding how letters change form when connected.' },
+  { id: 3, title: 'Iqro 3', desc: "Mastering Kasroh ('i') and Dhommah ('u').", color: 'bg-amber-600', icon: <LayoutGrid size={24}/>, content: 'Focus on basic harakat and sound changes.' },
+  { id: 4, title: 'Iqro 4', desc: 'Learning Tanwin, Sukun, and Qolqolah.', color: 'bg-indigo-600', icon: <Info size={24}/>, content: 'Practice tanwin and stopped letter sounds.' },
+  { id: 5, title: 'Iqro 5', desc: 'Tajweed rules like Waqof and Tasydid.', color: 'bg-purple-600', icon: <BookOpen size={24}/>, content: 'Deepening complex reading rules.' },
+  { id: 6, title: 'Iqro 6', desc: 'Iqlab, Ikhfa, and advanced signs.', color: 'bg-pink-600', icon: <ChevronRight size={24}/>, content: 'Final level before Mushaf reading.' },
 ];
 
-const IqroModule: React.FC = () => {
+const IqroModule: React.FC<{t: any}> = ({ t }) => {
   const [activeLevel, setActiveLevel] = useState(1);
 
   return (
     <div className="max-w-5xl mx-auto space-y-12 pb-24 px-4">
       <div className="text-center md:text-left">
-        <h1 className="text-5xl font-black mb-4 tracking-tight text-slate-950 dark:text-white">Pusat Belajar Iqro</h1>
-        <p className="text-slate-500 text-lg font-medium max-w-2xl">Metode cepat dan praktis belajar membaca Al-Quran dari dasar dengan dukungan AI Guru Tahfidz.</p>
+        <h1 className="text-5xl font-black mb-4 tracking-tight text-slate-950 dark:text-white">Iqro Learning Center</h1>
+        <p className="text-slate-500 text-lg font-medium max-w-2xl">Practical method to learn Quran from basics supported by AI Guru Tahfidz.</p>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -35,7 +35,7 @@ const IqroModule: React.FC = () => {
             </div>
             <div className="flex-1">
                <h3 className="font-black text-2xl tracking-tight">{lvl.title}</h3>
-               <p className={`text-[11px] font-black uppercase tracking-[0.2em] ${activeLevel === lvl.id ? 'text-emerald-100' : 'text-slate-400 dark:text-slate-500'}`}>Tingkatan {lvl.id}</p>
+               <p className={`text-[11px] font-black uppercase tracking-[0.2em] ${activeLevel === lvl.id ? 'text-emerald-100' : 'text-slate-400 dark:text-slate-500'}`}>Level {lvl.id}</p>
             </div>
           </button>
         ))}
@@ -63,7 +63,7 @@ const IqroModule: React.FC = () => {
               {HIJAIYAH_LETTERS.map((item) => (
                 <button
                   key={item.letter}
-                  onClick={() => speakText(`Huruf ${item.name}`)}
+                  onClick={() => speakText(`Letter ${item.name}`)}
                   className="aspect-square bg-white dark:bg-slate-800 rounded-[2rem] flex flex-col items-center justify-center gap-2 hover:bg-emerald-600 hover:text-white transition-all shadow-xl hover:shadow-emerald-600/30 border-2 border-slate-100 dark:border-slate-700 active:scale-90 group"
                 >
                   <span className="font-hijaiyah text-6xl leading-none text-slate-950 dark:text-white group-hover:scale-110 transition-transform group-hover:text-white font-bold">{item.letter}</span>
@@ -77,10 +77,10 @@ const IqroModule: React.FC = () => {
                  {Array.from({length: 12}).map((_, i) => (
                    <button 
                      key={i}
-                     onClick={() => speakText(`Pelajari bacaan materi ${i + 1} tingkat ${activeLevel}`)}
+                     onClick={() => speakText(`Studying material ${i + 1} for level ${activeLevel}`)}
                      className="p-12 bg-white dark:bg-slate-800 rounded-[3.5rem] border-2 border-slate-50 dark:border-slate-800 hover:border-emerald-500 transition-all flex flex-col items-center gap-8 group hover:shadow-2xl active:scale-95 shadow-lg"
                    >
-                      <div className="font-quran text-6xl text-slate-950 dark:text-slate-50 group-hover:scale-110 transition-transform font-bold" dir="rtl">
+                      <div className="font-quran text-6xl group-hover:scale-110 transition-transform font-bold" dir="rtl">
                          بَـتَـثَ {i + 1}
                       </div>
                       <div className="w-16 h-16 bg-emerald-50 dark:bg-emerald-900/30 rounded-2xl flex items-center justify-center text-emerald-600 group-hover:bg-emerald-600 group-hover:text-white transition-all shadow-inner border border-emerald-100 dark:border-emerald-800/50">
@@ -94,13 +94,13 @@ const IqroModule: React.FC = () => {
                   <div className="w-24 h-24 bg-amber-500 rounded-full flex items-center justify-center text-white mx-auto mb-8 shadow-2xl shadow-amber-500/30 scale-110">
                     <Sparkles size={48} />
                   </div>
-                  <h4 className="font-black text-amber-950 dark:text-amber-400 text-3xl mb-4 tracking-tight">Fitur Guru AI Tahfidz</h4>
-                  <p className="text-amber-900 dark:text-amber-500 font-bold text-xl max-w-2xl mx-auto mb-12">Dengarkan panduan pelafalan yang benar sesuai kaidah tajwid langsung dari AI Guru Al-Quran kami.</p>
+                  <h4 className="font-black text-amber-950 dark:text-amber-400 text-3xl mb-4 tracking-tight">AI Tahfidz Feature</h4>
+                  <p className="text-amber-900 dark:text-amber-500 font-bold text-xl max-w-2xl mx-auto mb-12">Listen to correct pronunciation guidance according to Tajweed directly from our AI Quran Teacher.</p>
                   <button 
-                    onClick={() => speakText(`Berikut adalah panduan membaca untuk materi Iqro level ${activeLevel}. Perhatikan panjang pendek dan harakatnya agar bacaan Anda menjadi sempurna.`)}
+                    onClick={() => speakText(`Here is the reading guide for Iqro level ${activeLevel}. Pay attention to the vowel length and harakat to make your reading perfect.`)}
                     className="px-14 py-6 bg-amber-500 hover:bg-amber-600 text-white font-black text-2xl rounded-3xl shadow-[0_20px_50px_rgba(245,158,11,0.4)] transition-all transform hover:scale-105 active:scale-95 flex items-center gap-4 mx-auto"
                   >
-                    <Volume2 size={32} /> Dengarkan Panduan Guru AI
+                    <Volume2 size={32} /> Listen to AI Guide
                   </button>
                </div>
             </div>

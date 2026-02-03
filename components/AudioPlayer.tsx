@@ -5,7 +5,7 @@ import { QARIS } from '../constants';
 import { fetchSurahs } from '../services/quranService';
 import { Surah } from '../types';
 
-const AudioPlayer: React.FC = () => {
+const AudioPlayer: React.FC<{t: any}> = ({ t }) => {
   const [surahs, setSurahs] = useState<Surah[]>([]);
   const [selectedSurah, setSelectedSurah] = useState<number>(1);
   const [selectedQari, setSelectedQari] = useState(QARIS[0].identifier);
@@ -21,15 +21,15 @@ const AudioPlayer: React.FC = () => {
   if (loading) return (
     <div className="flex flex-col items-center justify-center h-96 gap-6">
       <Loader2 className="animate-spin text-emerald-600" size={50} />
-      <p className="text-slate-500 font-black text-xl animate-pulse">Menyiapkan Murottal Digital...</p>
+      <p className="text-slate-500 font-black text-xl animate-pulse">Preparing Audio...</p>
     </div>
   );
 
   return (
     <div className="max-w-4xl mx-auto space-y-12 animate-in fade-in duration-700 px-4">
       <div className="text-center md:text-left">
-        <h1 className="text-5xl font-black mb-3 tracking-tighter text-slate-950 dark:text-white">Murottal Al-Quran</h1>
-        <p className="text-slate-500 text-lg font-medium">Dengarkan lantunan ayat suci dari Qari terbaik dunia dengan kualitas jernih.</p>
+        <h1 className="text-5xl font-black mb-3 tracking-tighter text-slate-950 dark:text-white">Quran Murottal</h1>
+        <p className="text-slate-500 text-lg font-medium">Listen to holy verses from the world's best Qaris in crystal clear quality.</p>
       </div>
 
       <div className="bg-white dark:bg-slate-900 rounded-[3.5rem] p-10 md:p-16 shadow-[0_30px_100px_-20px_rgba(0,0,0,0.1)] border-4 border-slate-50 dark:border-slate-800">
@@ -46,7 +46,7 @@ const AudioPlayer: React.FC = () => {
           <div className="flex-1 space-y-8 w-full">
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
               <div className="space-y-3">
-                <label className="text-xs font-black text-slate-400 dark:text-slate-500 uppercase tracking-[0.3em] mb-2 block">Pilih Qari</label>
+                <label className="text-xs font-black text-slate-400 dark:text-slate-500 uppercase tracking-[0.3em] mb-2 block">Select Qari</label>
                 <select 
                   value={selectedQari}
                   onChange={(e) => setSelectedQari(e.target.value)}
@@ -57,7 +57,7 @@ const AudioPlayer: React.FC = () => {
               </div>
 
               <div className="space-y-3">
-                <label className="text-xs font-black text-slate-400 dark:text-slate-500 uppercase tracking-[0.3em] mb-2 block">Pilih Surah</label>
+                <label className="text-xs font-black text-slate-400 dark:text-slate-500 uppercase tracking-[0.3em] mb-2 block">Select Surah</label>
                 <select 
                   value={selectedSurah}
                   onChange={(e) => setSelectedSurah(parseInt(e.target.value))}
@@ -95,7 +95,7 @@ const AudioPlayer: React.FC = () => {
                       ></div>
                     ))}
                   </div>
-                  <p className="text-emerald-700 dark:text-emerald-400 text-sm font-black uppercase tracking-widest">Memutar Audio...</p>
+                  <p className="text-emerald-700 dark:text-emerald-400 text-sm font-black uppercase tracking-widest">Playing Audio...</p>
                   <audio 
                     autoPlay 
                     src={audioUrl} 
@@ -112,7 +112,7 @@ const AudioPlayer: React.FC = () => {
       <div className="bg-emerald-50/50 dark:bg-emerald-900/10 rounded-[3rem] p-10 border-2 border-emerald-100 dark:border-emerald-800 shadow-xl">
          <h3 className="text-2xl font-black flex items-center gap-3 text-emerald-900 dark:text-emerald-400 mb-8 tracking-tight">
             <ListMusic size={28} />
-            Daftar Putar Populer
+            Popular Playlist
          </h3>
          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
             {[1, 18, 36, 67, 114, 55].map(num => (

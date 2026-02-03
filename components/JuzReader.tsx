@@ -1,11 +1,11 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { ArrowLeft, Play, Bookmark, Share2, BookOpen, Loader2, Eye, EyeOff, ZoomIn, ZoomOut, Copy, Check, ChevronUp, ChevronDown, AlertCircle, RefreshCw } from 'lucide-react';
+import { ArrowLeft, Play, Bookmark, Share2, BookOpen, Loader2, Eye, EyeOff, ZoomIn, ZoomOut, Copy, Check, AlertCircle, RefreshCw } from 'lucide-react';
 import { fetchJuz } from '../services/quranService';
 import { formatHonorifics } from '../utils/honorifics';
 
-const JuzReader: React.FC = () => {
+const JuzReader: React.FC<{t: any}> = ({ t }) => {
   const { number } = useParams<{ number: string }>();
   const navigate = useNavigate();
   const [data, setData] = useState<any>(null);
@@ -15,7 +15,6 @@ const JuzReader: React.FC = () => {
   const [showLatin, setShowLatin] = useState(true);
   const [playingAyah, setPlayingAyah] = useState<number | null>(null);
   const [copiedId, setCopiedId] = useState<number | null>(null);
-  const [showScrollTop, setShowScrollTop] = useState(false);
 
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
@@ -28,7 +27,7 @@ const JuzReader: React.FC = () => {
       setData(res);
     } catch (err: any) {
       console.error("Failed to load juz:", err);
-      setError(err.message || "Gagal memuat data Juz.");
+      setError(err.message || "Failed to load Juz data.");
     } finally {
       setLoading(false);
     }
@@ -38,21 +37,10 @@ const JuzReader: React.FC = () => {
     load();
   }, [number]);
 
-  useEffect(() => {
-    const handleScroll = () => {
-      setShowScrollTop(window.scrollY > 500);
-    };
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
-
-  const scrollToTop = () => window.scrollTo({ top: 0, behavior: 'smooth' });
-  const scrollToBottom = () => window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
-
   if (loading) return (
     <div className="flex flex-col items-center justify-center h-full py-48 gap-8">
       <Loader2 className="animate-spin text-emerald-600" size={64} />
-      <p className="text-slate-500 font-black text-xl animate-pulse">Menghubungkan ke Mushaf Juz {number}...</p>
+      <p className="text-slate-500 font-black text-xl animate-pulse">Loading Juz {number}...</p>
     </div>
   );
 
@@ -62,15 +50,10 @@ const JuzReader: React.FC = () => {
         <AlertCircle size={40} />
       </div>
       <div className="space-y-2">
-        <h2 className="text-2xl font-black text-slate-900 dark:text-white">Gagal Memuat Juz {number}</h2>
-        <p className="text-slate-500 dark:text-slate-400 max-w-md">{error || "Terjadi kendala saat mengambil data juz. Pastikan koneksi internet Anda stabil."}</p>
+        <h2 className="text-2xl font-black text-slate-900 dark:text-white">Failed to Load Juz {number}</h2>
+        <p className="text-slate-500 dark:text-slate-400 max-w-md">{error || "Internet connection issue."}</p>
       </div>
-      <div className="flex gap-4">
-        <button onClick={() => navigate('/mushaf')} className="px-8 py-3 bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-white rounded-2xl font-black hover:bg-slate-300 dark:hover:bg-slate-600 transition-all">Kembali</button>
-        <button onClick={load} className="flex items-center gap-2 px-8 py-3 bg-emerald-600 text-white rounded-2xl font-black shadow-lg hover:bg-emerald-700 transition-all">
-          <RefreshCw size={18} /> Coba Lagi
-        </button>
-      </div>
+      <button onClick={() => navigate('/mushaf')} className="px-8 py-3 bg-emerald-600 text-white rounded-2xl font-black shadow-lg hover:bg-emerald-700 transition-all">Back</button>
     </div>
   );
 
@@ -107,10 +90,10 @@ const JuzReader: React.FC = () => {
             </button>
             <div>
               <h1 className="font-black text-3xl text-slate-950 dark:text-white tracking-tight">Juz {number}</h1>
-              <p className="text-[11px] font-black text-emerald-600 dark:text-emerald-400 uppercase tracking-[0.3em] mt-1">Mushaf Digital</p>
+              <p className="text-[11px] font-black text-emerald-600 dark:text-emerald-400 uppercase tracking-[0.3em] mt-1">Digital Mushaf</p>
             </div>
           </div>
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-3 mr-24 md:mr-32">
              <button 
               onClick={() => setShowLatin(!showLatin)} 
               className={`p-4 rounded-2xl transition-all shadow-md ${showLatin ? 'bg-amber-100 text-amber-600' : 'bg-slate-100 dark:bg-slate-800 text-slate-400'}`}
@@ -162,7 +145,7 @@ const JuzReader: React.FC = () => {
 
               <div className="text-right">
                 <p 
-                  className="font-quran leading-[2.8] text-slate-950 dark:text-slate-50 font-bold"
+                  className="font-quran leading-[2.8] font-bold"
                   style={{ fontSize: `${fontSize}px` }}
                   dir="rtl"
                 >
@@ -171,8 +154,8 @@ const JuzReader: React.FC = () => {
               </div>
 
               {showLatin && transliterationAyahs[index] && (
-                 <div className="text-right border-r-4 border-amber-500/30 pr-6 mr-2">
-                   <p className="text-amber-700 dark:text-amber-400 font-bold italic text-lg leading-relaxed">
+                 <div className="text-right border-r-4 border-emerald-500/30 pr-6 mr-2">
+                   <p className="latin-reading text-lg leading-relaxed">
                       {transliterationAyahs[index].text}
                    </p>
                  </div>
@@ -186,21 +169,6 @@ const JuzReader: React.FC = () => {
             </div>
           </div>
         ))}
-      </div>
-
-      <div className="fixed bottom-24 right-8 flex flex-col gap-4 z-50">
-        <button 
-          onClick={scrollToTop}
-          className={`p-5 bg-emerald-600 text-white rounded-[1.5rem] shadow-2xl transition-all duration-500 transform active:scale-90 hover:scale-110 ${showScrollTop ? 'translate-y-0 opacity-100' : 'translate-y-20 opacity-0 pointer-events-none'}`}
-        >
-          <ChevronUp size={28} />
-        </button>
-        <button 
-          onClick={scrollToBottom}
-          className={`p-5 bg-slate-900 dark:bg-emerald-800 text-white rounded-[1.5rem] shadow-2xl transition-all duration-500 transform active:scale-90 hover:scale-110 ${showScrollTop ? 'translate-y-0 opacity-100' : 'translate-y-20 opacity-0 pointer-events-none'}`}
-        >
-          <ChevronDown size={28} />
-        </button>
       </div>
     </div>
   );
