@@ -4,19 +4,19 @@ import { HashRouter as Router, Routes, Route, Link, useLocation } from 'react-ro
 import { 
   Home, Book, Music, Mic, Heart, BookOpen, Menu, X, LayoutGrid, TrendingUp, Sparkles, BookMarked, Play, Pause, List, RefreshCw, ChevronUp, ChevronDown, Shield, FileText, HelpCircle
 } from 'lucide-react';
-import SurahList from './components/SurahList';
-import SurahReader from './components/SurahReader';
+import SurahList from '@/components/SurahList';
+import SurahReader from '@/components/SurahReader';
 import JuzReader from '@/components/JuzReader';
-import AudioPlayer from './components/AudioPlayer';
-import IqroModule from './components/IqroModule';
-import DoaModule from './components/DoaModule';
-import TafsirModule from './components/TafsirModule';
-import RecordingModule from './components/RecordingModule';
-import SettingsMenu from './components/SettingsMenu';
-import Footer from './components/Footer';
-import { PrivacyPolicy, FAQ } from './components/LegalPages';
-import { fetchDailyAyah } from './services/quranService';
-import { formatHonorifics } from './utils/honorifics';
+import AudioPlayer from '@/components/AudioPlayer';
+import IqroModule from '@/components/IqroModule';
+import DoaModule from '@/components/DoaModule';
+import TafsirModule from '@/components/TafsirModule';
+import RecordingModule from '@/components/RecordingModule';
+import SettingsMenu from '@/components/SettingsMenu';
+import Footer from '@/components/Footer';
+import { PrivacyPolicy, FAQ } from '@/components/LegalPages';
+import { fetchDailyAyah } from '@/services/quranService';
+import { formatHonorifics } from '@/utils/honorifics';
 
 const App: React.FC = () => {
   const [darkMode, setDarkMode] = useState(false);
