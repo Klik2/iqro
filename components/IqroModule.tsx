@@ -17,9 +17,9 @@ const IqroModule: React.FC = () => {
   const [activeLevel, setActiveLevel] = useState(1);
 
   return (
-    <div className="max-w-5xl mx-auto space-y-12 pb-24">
+    <div className="max-w-5xl mx-auto space-y-12 pb-24 px-4">
       <div className="text-center md:text-left">
-        <h1 className="text-5xl font-black mb-4 tracking-tight">Pusat Belajar Iqro</h1>
+        <h1 className="text-5xl font-black mb-4 tracking-tight text-slate-950 dark:text-white">Pusat Belajar Iqro</h1>
         <p className="text-slate-500 text-lg font-medium max-w-2xl">Metode cepat dan praktis belajar membaca Al-Quran dari dasar dengan dukungan AI Guru Tahfidz.</p>
       </div>
 
@@ -28,81 +28,79 @@ const IqroModule: React.FC = () => {
           <button 
             key={lvl.id}
             onClick={() => setActiveLevel(lvl.id)}
-            className={`flex items-center gap-6 p-6 rounded-[2rem] border-2 transition-all text-left group ${activeLevel === lvl.id ? 'bg-emerald-600 border-emerald-500 text-white shadow-2xl shadow-emerald-600/30' : 'bg-white dark:bg-slate-800 border-slate-100 dark:border-slate-800 hover:border-emerald-500 hover:bg-slate-50 dark:hover:bg-slate-700/50'}`}
+            className={`flex items-center gap-6 p-8 rounded-[2.5rem] border-2 transition-all text-left group active:scale-95 ${activeLevel === lvl.id ? 'bg-emerald-600 border-emerald-500 text-white shadow-2xl shadow-emerald-600/40' : 'bg-white dark:bg-slate-900 border-slate-100 dark:border-slate-800 hover:border-emerald-500 hover:bg-slate-50 dark:hover:bg-slate-800/50'}`}
           >
-            <div className={`w-14 h-14 rounded-2xl flex items-center justify-center shadow-lg font-black text-xl shrink-0 ${activeLevel === lvl.id ? 'bg-white text-emerald-600' : lvl.color + ' text-white'}`}>
+            <div className={`w-16 h-16 rounded-2xl flex items-center justify-center shadow-lg font-black text-2xl shrink-0 ${activeLevel === lvl.id ? 'bg-white text-emerald-600' : lvl.color + ' text-white'}`}>
               {lvl.id}
             </div>
             <div className="flex-1">
-               <h3 className="font-black text-xl">{lvl.title}</h3>
-               <p className={`text-[11px] font-black uppercase tracking-widest ${activeLevel === lvl.id ? 'text-emerald-100' : 'text-slate-400'}`}>Tingkatan {lvl.id}</p>
+               <h3 className="font-black text-2xl tracking-tight">{lvl.title}</h3>
+               <p className={`text-[11px] font-black uppercase tracking-[0.2em] ${activeLevel === lvl.id ? 'text-emerald-100' : 'text-slate-400 dark:text-slate-500'}`}>Tingkatan {lvl.id}</p>
             </div>
           </button>
         ))}
       </div>
 
-      {/* Level Detail Viewer */}
-      <div className="bg-white dark:bg-[#0b1121] rounded-[3rem] p-12 shadow-2xl border-4 border-slate-100 dark:border-slate-800">
-         <div className="flex flex-col md:flex-row items-center gap-8 mb-12">
-            <div className={`w-24 h-24 rounded-[2.5rem] flex items-center justify-center text-white shadow-xl ${IQRO_LEVELS.find(l => l.id === activeLevel)?.color}`}>
+      <div className="bg-white dark:bg-[#0b1121] rounded-[4rem] p-12 shadow-[0_30px_100px_-20px_rgba(0,0,0,0.15)] border-4 border-slate-50 dark:border-slate-800">
+         <div className="flex flex-col md:flex-row items-center gap-10 mb-16">
+            <div className={`w-28 h-28 rounded-[3rem] flex items-center justify-center text-white shadow-2xl scale-110 ${IQRO_LEVELS.find(l => l.id === activeLevel)?.color}`}>
               {IQRO_LEVELS.find(l => l.id === activeLevel)?.icon}
             </div>
             <div className="text-center md:text-left">
-               <h2 className="text-4xl font-black mb-2">{IQRO_LEVELS.find(l => l.id === activeLevel)?.title}</h2>
-               <p className="text-slate-500 text-xl font-medium">{IQRO_LEVELS.find(l => l.id === activeLevel)?.desc}</p>
+               <h2 className="text-5xl font-black mb-3 tracking-tighter text-slate-950 dark:text-white">{IQRO_LEVELS.find(l => l.id === activeLevel)?.title}</h2>
+               <p className="text-slate-500 text-2xl font-medium">{IQRO_LEVELS.find(l => l.id === activeLevel)?.desc}</p>
             </div>
          </div>
 
-         <div className="p-8 bg-slate-50 dark:bg-slate-900 rounded-[2rem] mb-12 border-2 border-slate-100 dark:border-slate-800">
-            <p className="text-slate-700 dark:text-slate-300 leading-relaxed text-xl font-medium italic">
+         <div className="p-10 bg-slate-50 dark:bg-slate-900/50 rounded-[3rem] mb-16 border-2 border-slate-100 dark:border-slate-800 shadow-inner">
+            <p className="text-slate-950 dark:text-slate-100 leading-relaxed text-2xl font-bold italic text-center">
               "{IQRO_LEVELS.find(l => l.id === activeLevel)?.content}"
             </p>
          </div>
 
-         {/* Learning Grid */}
          {activeLevel === 1 ? (
-            <div className="grid grid-cols-4 sm:grid-cols-6 md:grid-cols-7 lg:grid-cols-8 gap-4">
+            <div className="grid grid-cols-4 sm:grid-cols-6 md:grid-cols-7 lg:grid-cols-8 gap-5">
               {HIJAIYAH_LETTERS.map((item) => (
                 <button
                   key={item.letter}
                   onClick={() => speakText(`Huruf ${item.name}`)}
-                  className="aspect-square bg-white dark:bg-slate-800 rounded-3xl flex flex-col items-center justify-center gap-1 hover:bg-emerald-600 hover:text-white transition-all shadow-md hover:shadow-emerald-600/30 border-2 border-slate-100 dark:border-slate-700 active:scale-95 group"
+                  className="aspect-square bg-white dark:bg-slate-800 rounded-[2rem] flex flex-col items-center justify-center gap-2 hover:bg-emerald-600 hover:text-white transition-all shadow-xl hover:shadow-emerald-600/30 border-2 border-slate-100 dark:border-slate-700 active:scale-90 group"
                 >
-                  <span className="font-hijaiyah text-5xl leading-none group-hover:scale-110 transition-transform">{item.letter}</span>
-                  <span className="text-[10px] font-black uppercase tracking-tighter opacity-60 group-hover:opacity-100">{item.name}</span>
+                  <span className="font-hijaiyah text-6xl leading-none text-slate-950 dark:text-white group-hover:scale-110 transition-transform group-hover:text-white font-bold">{item.letter}</span>
+                  <span className="text-[11px] font-black uppercase tracking-tighter text-slate-400 dark:text-slate-500 group-hover:text-white/80">{item.name}</span>
                 </button>
               ))}
             </div>
          ) : (
-            <div className="space-y-12">
-               <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+            <div className="space-y-16">
+               <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
                  {Array.from({length: 12}).map((_, i) => (
                    <button 
                      key={i}
                      onClick={() => speakText(`Pelajari bacaan materi ${i + 1} tingkat ${activeLevel}`)}
-                     className="p-10 bg-white dark:bg-slate-800 rounded-[2.5rem] border-2 border-slate-100 dark:border-slate-800 hover:border-emerald-500 transition-all flex flex-col items-center gap-6 group hover:shadow-2xl active:scale-95"
+                     className="p-12 bg-white dark:bg-slate-800 rounded-[3.5rem] border-2 border-slate-50 dark:border-slate-800 hover:border-emerald-500 transition-all flex flex-col items-center gap-8 group hover:shadow-2xl active:scale-95 shadow-lg"
                    >
-                      <div className="font-quran text-5xl text-slate-800 dark:text-slate-100 group-hover:scale-110 transition-transform" dir="rtl">
+                      <div className="font-quran text-6xl text-slate-950 dark:text-slate-50 group-hover:scale-110 transition-transform font-bold" dir="rtl">
                          بَـتَـثَ {i + 1}
                       </div>
-                      <div className="w-12 h-12 bg-emerald-100 dark:bg-emerald-900/30 rounded-xl flex items-center justify-center text-emerald-600 group-hover:bg-emerald-600 group-hover:text-white transition-all shadow-inner">
-                         <Volume2 size={24} />
+                      <div className="w-16 h-16 bg-emerald-50 dark:bg-emerald-900/30 rounded-2xl flex items-center justify-center text-emerald-600 group-hover:bg-emerald-600 group-hover:text-white transition-all shadow-inner border border-emerald-100 dark:border-emerald-800/50">
+                         <Volume2 size={28} />
                       </div>
                    </button>
                  ))}
                </div>
                
-               <div className="bg-amber-100/30 dark:bg-amber-900/10 p-10 rounded-[3rem] border-4 border-dashed border-amber-200 dark:border-amber-900/30 text-center">
-                  <div className="w-20 h-20 bg-amber-500 rounded-full flex items-center justify-center text-white mx-auto mb-6 shadow-xl shadow-amber-500/20">
-                    <Sparkles size={40} />
+               <div className="bg-amber-100/20 dark:bg-amber-900/10 p-14 rounded-[4rem] border-4 border-dashed border-amber-200 dark:border-amber-900/30 text-center">
+                  <div className="w-24 h-24 bg-amber-500 rounded-full flex items-center justify-center text-white mx-auto mb-8 shadow-2xl shadow-amber-500/30 scale-110">
+                    <Sparkles size={48} />
                   </div>
-                  <h4 className="font-black text-amber-800 dark:text-amber-400 text-2xl mb-4">Fitur Guru AI Tahfidz</h4>
-                  <p className="text-amber-700 dark:text-amber-500 font-bold text-lg max-w-xl mx-auto mb-10">Dengarkan panduan pelafalan yang benar sesuai kaidah tajwid langsung dari AI Guru Al-Quran kami.</p>
+                  <h4 className="font-black text-amber-950 dark:text-amber-400 text-3xl mb-4 tracking-tight">Fitur Guru AI Tahfidz</h4>
+                  <p className="text-amber-900 dark:text-amber-500 font-bold text-xl max-w-2xl mx-auto mb-12">Dengarkan panduan pelafalan yang benar sesuai kaidah tajwid langsung dari AI Guru Al-Quran kami.</p>
                   <button 
                     onClick={() => speakText(`Berikut adalah panduan membaca untuk materi Iqro level ${activeLevel}. Perhatikan panjang pendek dan harakatnya agar bacaan Anda menjadi sempurna.`)}
-                    className="px-12 py-5 bg-amber-500 hover:bg-amber-600 text-white font-black text-xl rounded-2xl shadow-2xl shadow-amber-500/40 transition-all transform hover:scale-105 active:scale-95 flex items-center gap-4 mx-auto"
+                    className="px-14 py-6 bg-amber-500 hover:bg-amber-600 text-white font-black text-2xl rounded-3xl shadow-[0_20px_50px_rgba(245,158,11,0.4)] transition-all transform hover:scale-105 active:scale-95 flex items-center gap-4 mx-auto"
                   >
-                    <Volume2 size={28} /> Dengarkan Panduan Guru AI
+                    <Volume2 size={32} /> Dengarkan Panduan Guru AI
                   </button>
                </div>
             </div>
