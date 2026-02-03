@@ -6,7 +6,7 @@ import {
 } from 'lucide-react';
 import SurahList from './components/SurahList';
 import SurahReader from './components/SurahReader';
-import JuzReader from './components/JuzReader';
+import JuzReader from '@/components/JuzReader';
 import AudioPlayer from './components/AudioPlayer';
 import IqroModule from './components/IqroModule';
 import DoaModule from './components/DoaModule';
