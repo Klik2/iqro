@@ -2,15 +2,15 @@
 export const formatHonorifics = (text: string): string => {
   if (!text) return text;
   
-  // Rule 1: Replace common abbreviations with full honorifics
+  // Rule 9: Replace abbreviations with full honorifics as specified
   let formatted = text
-    // Allah
-    .replace(/\bSWT\b/g, 'Subhanahu wa Ta\'ala')
-    // Muhammad
-    .replace(/\bSAW\b/g, 'Shallallahu ‘Alaihi wa Sallam')
-    // Prophets
+    // Allah SWT -> Allah Subhanahu wa Ta'ala
+    .replace(/\b(Allah\s+)?SWT\b/g, 'Subhanahu wa Ta\'ala')
+    // Muhammad SAW -> Shallallahu ‘Alaihi wa Sallam
+    .replace(/\b(Muhammad\s+)?SAW\b/g, 'Shallallahu ‘Alaihi wa Sallam')
+    // Prophets AS -> Alaihis-salam
     .replace(/\bAS\b/g, 'Alaihis-salam')
-    // Sahabat variations
+    // Sahabat RA -> Radhiyallahu ‘anhu (generalized logic, can be refined per context)
     .replace(/\bRA\b/g, 'Radhiyallahu ‘anhu');
 
   // Case insensitive variants often found in translation text
